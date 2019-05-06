@@ -2,9 +2,9 @@
 
 # ParkPredNancy Specific
 data/
-
-logs/
-credentials/
+doc/archive/
+*.pages
+*.numbers
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
