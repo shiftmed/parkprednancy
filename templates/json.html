@@ -1,0 +1,287 @@
+{% extends "layout.html" %}
+{% set active_page = 'dashboard' %}
+
+{% block body %}
+
+<body>
+
+
+	<div class="container">
+		<div class="col">
+			<div class="row" style="margin-top: 30px;">
+				<h5 class="right blue-text text-accent-1">
+					GÉNÉRATEUR DE GRILLE TARIFAIRE
+				</h5>
+			</div>
+
+		</div>
+
+
+
+		<div class="row">
+
+
+			<form id="mainForm" action=" {{url_for('create_json') }}" class="col s12" method="post">
+				<div class="row">
+					<h3 class="grey-text text-darken-3">Données générales</h3>
+					<div class="row">
+						<div class="col s9">
+							<div class="input-field ">
+								<input id="parkingName" type="text" name="parkingName">
+								<label for="parkingName">NOM DU PARKING</label>
+							</div>
+						</div>
+						<div class="col s3">
+							<div class="input-field ">
+								<input id="freeMinutes" type="text" name="freeMinutes"  value="30" >
+								<label for="freeMinutes">MINUTES GRATUITES</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<h3 class="grey-text text-darken-3">Tarification à la journée</h3>
+
+						<div class="row">
+							<div class="col s12">
+								<div class="input-field ">
+									<input id="initialPrice" type="text"  name="initialPrice" value="0">
+									<label for="initialPrice">PRIX INITAL</label>
+								</div>
+							</div>
+
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="1h" type="text" name="1h"  value="1.6">
+									<label for="1h">1H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="2h" type="text"  name="2h" value="4.40">
+									<label for="2h">2H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="3h" type="text"  name="3h" value="6">
+									<label for="3h">3H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="4h" type="text"  name="4h" value="7.20">
+									<label for="5h">4H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="5h" type="text"  name="5h" value="8.40">
+									<label for="5h">5H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="6h" type="text"  name="6h" value="9.60">
+									<label for="6h">6H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="7h" type="text"  name="7h" value="10.80">
+									<label for="7h">7H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="8h" type="text"  name="8h" value="12">
+									<label for="8h">8H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="9h" type="text"  name="9h" value="12.80">
+									<label for="9h">9H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="10h" type="text"  name="10h" value="13.60">
+									<label for="10h">10H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="11h" type="text"  name="11h" value="14.20">
+									<label for="11h">11H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="12h" type="text"  name="12h" value="15.20"> 
+									<label for="12h">12H</label>
+								</div>
+							</div>
+
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="12h" type="text"  name="12h" value="15.20"> 
+									<label for="12h">12H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+								<input id="13h" type="text"  name="13h" value="15.60"> 
+									<label for="13h">13H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="14h" type="text"  name="14h" value="16.00"> 
+									<label for="14h">14H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="15h" type="text"  name="15h" value="16.40"> 
+									<label for="15h">15H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="16h" type="text"  name="16h" value="16.80"> 
+									<label for="16h">16H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="17h" type="text"  name="17h" value="17.20"> 
+									<label for="17h">17H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="18h" type="text"  name="18h" value="17.6"> 
+									<label for="18h">18H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="19h" type="text"  name="19h" value="18.00"> 
+									<label for="19h">19H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="20h" type="text"  name="20h" value="18.40"> 
+									<label for="20h">20H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="21h" type="text"  name="21h" value="18.80"> 
+									<label for="21h">21H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="22h" type="text"  name="22h" value="19.20"> 
+									<label for="22h">22H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="23h" type="text"  name="23h" value="19.60"> 
+									<label for="23h">23H</label>
+								</div>
+							</div>
+							<div class="col s2">
+								<div class="input-field ">
+									<input id="24h" type="text"  name="24h" value="20.00"> 
+									<label for="24h">24H</label>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="row">
+
+						<h3 class="grey-text text-darken-3">Tarification de nuit et dimanche </h3>
+
+						<div class="input-field col s3">
+							<select id='sundayPricing'  name="sundayPricing" class="blue-text text-darken-3">
+
+								<option value="yes" selected="selected"> Oui </option>
+								<option value="no"> Non </option>
+
+
+							</select>
+							<label>Tarif spécial le dimanche</label>
+						</div>
+						<div class="col s3">
+							<div class="input-field ">
+								<input id="price2h4h" type="text" name="price2h4h"  value="1">
+								<label for="price2h4h">TARIF &#60;4H</label>
+							</div>
+						</div>
+						<div class="col s3">
+							<div class="input-field ">
+								<input id="price4h12h" type="text"  name="price4h12h" value="2">
+								<label for="price4h12h">TARIF 4-12H </label>
+							</div>
+
+						</div>
+						<div class="col s3">
+							<div class="input-field ">
+								<input id="over24h" type="text"  name="Over24h" value="0.9">
+								<label for="over24h">TARIF &#62;24h</label>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div class="row">
+					<div class="center-align">
+						<button  class="btn btn-floating grey darken-3" type="submit" value="submit">
+							<i class="material-icons" >done</i>  
+						</button>
+					</div>
+				</div>
+
+			</form>
+
+
+		</div>
+	</div>
+
+	{% with messages = get_flashed_messages(category_filter=["error"]) %}
+	{% set pos_y = 120 %}
+
+	{% if messages %}
+	
+	{% for message in messages %}
+
+
+
+	<div class="collection oast" style="position:absolute; top:{{pos_y + loop.index*50}}px; right:40px; width:500px;">
+		<a href="#!" class="collection-item blue-text text-accent-1" style="padding-top:10px;">
+			{{message}}
+			<i class=" material-icons blue-text right" style="position:relative;">done</i>
+		</a> 
+	</div>
+
+
+
+	{% endfor %}
+
+	{% endif %}			
+
+
+
+
+	{% endwith %}
+
+</body>
+
+{% endblock %}

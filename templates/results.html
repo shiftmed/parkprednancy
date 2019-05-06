@@ -1,0 +1,230 @@
+
+{% extends "layout.html" %}
+{% set active_page = 'simulation' %}
+{% block body %}
+
+<body>
+	<script type="text/javascript">
+        // define the chart data
+        var chartData = {
+        	labels : [{% for item in labels %}
+        	"{{item}}",
+        	{% endfor %}],
+
+        	datasets : [{
+        		fill: '1',
+        		label: 'Simulé',
+        		lineTension: 0,
+        		backgroundColor: "rgba(75,192,192,0.4)",
+        		borderColor: "rgba(75,192,192,1)",
+        		borderCapStyle: 'butt',
+        		borderDash: [],
+        		borderDashOffset: 0.0,
+        		borderWidth: 1,
+        		borderJoinStyle: 'round',
+        		pointBorderColor: "rgba(75,192,192,1)",
+        		pointBackgroundColor: "#fff",
+        		pointBorderWidth: 1,
+        		pointHoverRadius: 5,
+        		pointHoverBackgroundColor: "rgba(75,192,192,1)",
+        		pointHoverBorderColor: "rgba(220,220,220,1)",
+        		pointHoverBorderWidth: 2,
+        		pointRadius: 1,
+        		pointHitRadius: 10,
+        		spanGaps: false,
+        		data : [
+        		{% for item in values %}
+        		{{item}},
+        		{% endfor %}]},
+        		{
+        			label: 'Estimé',
+        			backgroundColor: "rgba(192,75,20,1)",
+        			fill: true,
+        			lineTension: 3,
+        			data : [ 
+        			{% for item in errorSales %}
+        			{{item}},
+        			{% endfor %}
+        			]
+        		}
+
+        		]
+        	};
+
+        </script>
+
+        <div class="content">
+
+        	<div class="row" style="margin-top:40px;">
+
+        		<div class="col s6 offset-s3">
+        			<div class="row">
+        				<p class="right grey-text text-darken-3" style="font-size: 11px; margin-right:25px;" >
+
+        					<i class="material-icons grey-text right text-darken-3 " style="position:relative;margin-right:1px; margin-left:3px;  top:-5px; ">av_timer</i>
+        					Résultats générés en {{ r_duration | round | int}}s 
+        				</p>
+        			</div>
+
+        			<ul class="collapsible popout" data-collapsible="accordion">
+        				<li>
+        					<div class="collapsible-header active grey-text text-darken-3" style="text-decoration:  none ; color: inherit; font-size:14px;"><i class="material-icons grey-text">assignment</i>Chiffre d'affaires
+
+        					</div>
+
+        					<div class="collapsible-body">
+
+        						<div class="row">
+
+        							<div class="right"><font size="2"><i class="material-icons teal-text" style="position:relative;margin-right:1px; margin-left:15px;  top:5px;">book </i> {{ tableName|title }} </font></div>
+        							<div class="right"><font size="2"><i class="material-icons teal-text" style="position:relative;margin-right:1px; margin-left:15px;  top:5px;">local_parking </i>{{ parkingName | title }} </font></div>
+        						</div>
+
+        						<div class="row ">
+        						<center> <font size='1' class="teal-text text-darken-1">RÉEL </font> <br/>
+        								<font size="2">({{ realSales }} €)</font>
+        							</center>
+        						</div>
+
+        						<div class="row"> 
+        							{% if sales > realSales %}
+        							<h3 class="green-text center text-accent-3 left"><font size='1'>SIMULÉ </font><br/> {{ sales }} €</h3> <h3 class="yellow-text center text-darken-3 right"> <font size='1' class="right">ESTIMÉ </font> {{ estimatedSales }} €</h3>
+        							{% else %}</div>
+        							<div class="row">
+        								<h3 class="red-text center text-darken-4 left"><font size='1'>SIMULÉ </font> {{ sales }} €</h3>  <h3 class="yellow-text center text-darken-3 right"><font size='1'>ESTIMÉ </font> {{ estimatedSales }} €</h3>
+        								{% endif %}
+
+
+        							</div>
+
+
+        						</div>
+        					</li>
+
+
+
+        					<li>
+        						<a href="#" data-target="modal1" class="collapsible-header grey-text text-darken-2" style="text-decoration:  none ; color: inherit; font-size:14px;"><i class="material-icons grey-text">show_chart</i>Incertitude relative </a>
+        					</li>
+
+        					<div id="modal1" class="modal" >
+        						<div class="modal-content" height="700" width='800'>
+        							<div class="row">
+        								<h4 class="right teal-text"><i class="material-icons grey-text right " style="position:relative; top:-2px;font-size:40px;">insert_chart</i>Incertitude relative 
+        								</h4>
+        							</div>
+        							<div class="divider"></div>
+        							<div class="row">
+
+        								<canvas id="chart" class="center-align" height="300" width="600" style="padding-top:10px; margin-left: auto; margin-right:auto"></canvas>
+
+        							</div>
+
+        							<div class="divider"></div>
+        						</div>
+
+        						<div class="modal-footer">
+        							<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Retour</a>
+        						</div>
+        					</div>
+
+
+
+
+
+        					<script>
+
+// Global parameters:
+// do not resize the chart canvas when its container does (keep at 600x400px)
+Chart.defaults.global.responsive = false;
+
+
+
+// get chart canvas
+var ctx = document.getElementById("chart").getContext("2d");
+
+// create the chart using the chart canvas
+var myChart = new Chart(ctx, {
+	type: 'line',
+	data: chartData,
+	options: {
+		scales: {
+			yAxes: [{
+				gridLines: {
+					offsetGridLines: true
+				},
+				ticks: {
+					padding: 2,
+                                                                                // Include a dollar sign in the ticks
+                                                                                callback: function(value, index, values) {
+                                                                                	return value + '€';
+                                                                                }
+                                                                            }
+                                                                        }],
+                                                                        xAxes: [{
+                                                                        	ticks: {
+                                                                                // Include a dollar sign in the ticks
+                                                                                callback: function(value, index, values) {
+                                                                                	return 'CAR: '+value + '   ';
+                                                                                }
+                                                                            }
+                                                                        }]
+                                                                    },
+
+                                                                    title: {
+                                                                    	display: true,
+                                                                    	text: 'Différence entre coût réel et simulé/estimé'
+                                                                    },
+                                                                    legend: {
+                                                                    }
+                                                                }
+                                                            });
+
+                                                        </script>
+
+
+                                                        <li>
+                                                        	<div class="collapsible-header  grey-text text-darken-3" style="text-decoration:  none ; color: inherit; font-size:14px;"><i class="material-icons grey-text">insert_chart</i>Comparaison </div>
+                                                        	<div class="collapsible-body ">
+                                                        		<div class="row">
+                                                        			<center> <font size='1' class="teal-text text-darken-1">ÉCART RELATIF </font> <br/>
+                                                        			</center> 
+                                                        			{% set r = ((sales - (realSales))/sales)*100 %}  {% set p = ((sales - (estimatedSales))/sales)*100 %} 
+                                                        			{% if r < 0 %}
+                                                        			<h6 class="center red-text text-darken-4 left">{{r}} %</h6> <h6 class="center yellow-text text-darken-4 right">{{p}} %</h6>
+                                                        			{% elif r < 5 %}
+                                                        			<h6 class="center orange-text text-lighten-1 left">{{ r }} %</h6>  <h6 class="center yellow-text text-darken-4 right">{{p}} %</h6>
+                                                        			{% else %} 
+                                                        			<h6 class="center green-text text-accent-3 left">{{ r }} %</h6> <h6 class="center yellow-text text-darken-4 right">{{p}} %</h6>
+                                                        			{% endif %}
+                                                        		</div>
+
+                                                        		<center> <font size='1' class="teal-text text-darken-1">COMPARAISON </font> <br/>
+                                                        		</center> 
+                                                        		{% set c = sales - realSales%}<br/>
+                                                        		<div class="row">
+                                                        			{% if c < 0 %}
+                                                        			<h5 class="center red-text text-darken-4 left">{{ sales - realSales}} €</h5> <h5 class="center yellow-text text-darken-4 right">{{ sales - estimatedSales}} €</h5>
+                                                        			{% else %}
+                                                        			<h5 class="center green-text text-accent-3 left">{{ sales - realSales}} €</h5> <h5 class="center yellow-text text-darken-4 right">{{ sales - estimatedSales}} €</h5>
+                                                        			{% endif %}
+                                                        		</div>
+                                                        	</div>
+                                                        </li>
+
+
+                                                        <li>
+                                                        	<a href="/simulation" class="collapsible-header  teal-text text-darken-3" style="text-decoration:  none ; color: inherit;"><i class="material-icons grey-text">redo</i>Relancer une simulation</a>
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </body>
+
+                                    {% endblock %}
+

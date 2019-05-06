@@ -1,0 +1,373 @@
+
+{% extends "layout.html" %}
+{% set active_page = 'simulation' %}
+{% block body %}
+
+<body>
+	<script type="text/javascript">
+
+		var pricingData = {
+			data: [{% for price in eachCarPricing %}
+			'{{price}}',
+			{% endfor %}]
+		};
+
+
+	</script>
+	<script type="text/javascript">
+	    // define the chart data
+	    var chartData = {
+	    	labels : [{% for item in labels %}
+	    	"{{item}}",
+	    	{% endfor %}],
+	    	datasets : [{
+	    		fill: '1',
+	    		label: 'Simulé',
+	    		lineTension: 0,
+	    		backgroundColor: "rgba(75,192,192,0.4)",
+	    		borderColor: "rgba(75,192,192,1)",
+	    		borderCapStyle: 'butt',
+	    		borderDash: [],
+	    		borderDashOffset: 0.0,
+	    		borderWidth: 1,
+	    		borderJoinStyle: 'round',
+	    		pointBorderColor: "rgba(75,192,192,1)",
+	    		pointBackgroundColor: "#fff",
+	    		pointBorderWidth: 1,
+	    		pointHoverRadius: 5,
+	    		pointHoverBackgroundColor: "rgba(75,192,192,1)",
+	    		pointHoverBorderColor: "rgba(220,220,220,1)",
+	    		pointHoverBorderWidth: 2,
+	    		pointRadius: 1,
+	    		pointHitRadius: 10,
+	    		spanGaps: false,
+	    		data : [
+	    		{% for item in values %}
+	    			{{item}},
+	    		{% endfor %}]},
+	    		{
+	    			label: 'Estimé',
+	    			backgroundColor: "rgba(192,75,20,1)",
+	    			fill: true,
+	    			lineTension: 3,
+	    			data : [ 
+	    			{% for item in errorSales %}
+	    				{{item}},
+	    			{% endfor %}
+	    			]
+	    		}
+	    		]
+	    	};
+
+    </script>
+    <div class="row">
+    </div>
+
+    <div class="content" style="margin-left: 30px; margin-right:30px;">
+	    	<p class="right grey-text text-darken-3" style="font-size: 11px; margin-right:25px;" >
+
+	    		<i class="material-icons grey-text right text-darken-3 " style="position:relative;margin-right:1px; margin-left:3px;  top:-5px; ">av_timer</i>
+	    		Résultats générés en  {{ r_duration | round | int}}s  
+	    	</p>
+    		<!-- FIRST-ROW -->
+    		<div class="row">
+	    		<!-- LEFT-COL -->
+	    		<div class="col l5" style="margin-top:45px;">
+
+	    			<div class="card small" style="height:206px;">
+	    				<div class="row" style="padding-right:10px;">
+	    					<div class="card-title">
+
+	    						<h5 class=" right grey-text text-darken-2 thin">
+	    							Chiffre d'affaires<i class="material-icons small teal-text" style="position:relative; top:6px; padding-left:10px;" >euro_symbol</i> 
+	    						</h5>
+
+
+	    					</div>
+	    				</div>
+	    				<div class="divider" style="position: relative; top:-26px;"></div>
+
+	    				<div class="card-content" style="position: relative; top:-43px;">
+
+	    					<div class="row">
+	    						<div class="right"><font size="2"><i class="material-icons grey-text text-darken-2" style="position:relative;margin-right:1px; margin-left:10px;  top:5px;">book </i> {{ tableName|title }} </font></div>
+	    						<div class="right"><font size="2"><i class="material-icons grey-text text-darken-2" style="position:relative;margin-right:1px; margin-left:0px;  top:5px;">local_parking </i>{{ parkingName | title }} </font></div>
+
+	    					</div>
+
+	    					<center>
+	    						<h5 class="text-darken-1">
+	    							<font size='1'>RÉEL</font>
+	    							{{ realSales }} €
+	    						</h5> 
+	    					</center>
+
+	    					<h5 class="yellow-text text-darken-2 left"> 
+	    						<font class='grey-text text-darken-2' size='1'>ESTIMÉ&nbsp</font> 
+	    						{{ estimatedSales }} €
+	    					</h5>
+
+
+	    					{% if sales > realSales %}
+	    					<h5 class="green-text text-darken-3 right">
+	    						<font class='grey-text text-darken-2' size='1'> SIMULÉ&nbsp</font>
+	    						{{ sales }} €
+	    					</h5> 
+
+	    					{% else %} 
+
+	    					<h5 class="red-text text-lighten-2 right">
+	    						<font class='grey-text text-darken-2' size='1'> SIMULÉ&nbsp</font> 
+	    						{{ sales }} €
+	    					</h5> 
+
+	    					{% endif %}
+
+	    				</div>
+	    			</div>
+
+	    			<div class="card small" style="height:260px">
+	    				<div class="row" style="padding-right:10px;">
+	    					<div class="card-title">
+
+	    						<h5 class=" right grey-text text-darken-2 thin">
+	    							Comparaison<i class="material-icons small teal-text" style="position:relative; top:6px; padding-left:10px;" >insert_chart</i> 
+	    						</h5>
+
+	    					</div>
+	    				</div>
+
+	    				<div class="divider" style="position: relative; top:-26px;"></div>
+
+	    				<div class="card-content" style="position: relative; top:-40px;">
+
+	    					<center> <font size='1' class="grey-text text-darken-3">ÉCART RELATIF </font> </center> 
+	    					<div class="row">
+	    						{% set p = ((estimatedSales - (realSales))/realSales)*100 %} 
+	    						{% set r = ((sales - (realSales))/realSales)*100 %}  
+
+	    						{% if r < 0 %}
+	    						<h6 class=" yellow-text text-darken-2 left">{{ p }} %</h6> 
+
+	    						<h6 class=" red-text text-lighten-2 right">{{ r }} %</h6>
+	    						{% elif r < 5 %}
+	    						<h6 class=" yellow-text text-darken-2 left">{{ p }} %</h6>  
+	    						<h6 class=" orange-text text-lighten-2 right">{{ r }} %</h6>
+	    						{% else %} 
+	    						<h6 class=" yellow-text text-darken-2 left">{{ p }} %</h6> 
+	    						<h6 class="green-text text-lighten-2 right">{{ r }} %</h6>
+	    						{% endif %}
+	    					</div>
+	    					<center> <font size='1' class="grey-text text-darken-3">COMPARAISON </font> </center> 
+	    					<div class="row">
+
+	    						{% set c = sales - realSales%}<br/>
+
+	    						<div class="row">
+	    							{% if c < 0 %}
+	    							<h5 class=" yellow-text text-darken-2 left">{{ estimatedSales - realSales}} €</h5> 
+	    							<h5 class=" red-text text-lighten-2 right">{{ sales - realSales}} €</h5>
+	    							{% else %}
+	    							<h5 class=" yellow-text text-darken-2  left">{{ estimatedSales - realSales }} €</h5> 
+	    							<h5 class=" green-text text-lighten-2 right">{{ sales - realSales}} €</h5>
+	    							{% endif %}
+	    						</div>
+	    					</div>
+	    				</div>
+
+	    			</div>
+
+	    			<div class="card small hide-on-med-and-down"  style="height:60px;">
+	    				<div class="row" style="padding-right:10px;">
+	    					<div class="card-title">
+
+	    						<h5 class=" right thin ">
+	    							<a href="/simulation" class=" teal-text text-darken-3" style="text-decoration:  none ; color: inherit;">Relancer une simulation</a>
+	    							<i class="material-icons grey-text" style="position:relative; top:3px; padding-left:10px; ">redo</i>
+	    						</h5>
+
+	    					</div>
+	    				</div>
+	    			</div>
+
+	    			<!-- SMALL-DEVICE -->
+	    			<div class="card small hide-on-large-only">
+	    				<div class="row" style="padding-right:10px;">
+	    					<div class="card-title">
+
+	    						<h5 class=" right grey-text text-darken-2 thin">
+	    							Attention <i class="material-icons small teal-text" style="position:relative; top:6px; padding-left:10px;" >warning</i> 
+	    						</h5>
+
+	    					</div>
+	    				</div>
+	    				<div class="divider" style="position: relative; top:-26px;"></div>
+
+	    				<div class="card-content">
+	    					<h5 class="thin">
+	    						Merci d'utiliser un appareil avec un plus grand écran pour visualiser correctement les données supplémentaires.
+	    					</h5>
+
+	    				</div>
+	    			</div>
+
+
+	    			<div class="card small hide-on-large-only"  style="height:60px;">
+	    				<div class="row" style="padding-right:10px;">
+	    					<div class="card-title">
+
+	    						<h5 class=" right thin ">
+	    							<a href="/simulation" class=" teal-text text-darken-3" style="text-decoration:  none ; color: inherit;">Relancer une simulation</a>
+	    							<i class="material-icons grey-text" style="position:relative; top:3px; padding-left:10px; ">redo</i>
+	    						</h5>
+
+	    					</div>
+	    				</div>
+	    			</div>
+
+
+	    			<!-- /SMALL-DEVICE -->
+	    		</div>
+	    		<!-- /LEFT-COL-->
+
+    			<!-- RIGHT-COL -->
+    			<div class="col l7">
+	    			<div id='carQueryArea' class="card small hide-on-med-and-down"  style="height:70px;">
+	    				<div class="row" style="padding-right:10px;">
+	    					<div class="card-title">
+
+
+	    						<div class="row">
+	    							<div class="input-field col s4">
+	    								<i class="material-icons prefix">directions_car</i>
+	    								<input id="carNumber" type="text" class="validate" name="carNumber">
+	    								<label for="carNumber">N° VOITURE</label>
+
+	    							</div>
+	    							<div class="center-align">
+	    								<button  id="goButton" class=" btn btn-floating grey accent-2" style="top:40px; display: none;"  onclick="launchCarPricing()">
+	    									<i class="material-icons" >search</i>  
+	    								</button>
+	    							</div>
+
+	    							<div  id='resultCarPricing' class="" >
+
+	    							</div>
+
+	    						</div>
+	    					</div>
+	    				</div>
+	    			</div>
+
+				<div class="card small hide-on-med-and-down" style="overflow-wrap: normal; overflow:hidden; z-index: 1001;">
+		    			<div class="row" style="padding-right:10px;">
+		    				<div class="card-title">
+		    					
+		    					<h5 class=" right grey-text text-darken-2 thin">
+		    						Analyse des anomalies<i class="material-icons small teal-text" style="position:relative; top:6px; padding-left:10px;" >payment</i> 
+		    					</h5>
+
+		    				</div>
+		    			</div>
+		    			<div class="divider" style="position: relative; top:-26px; z-index: 1001;"></div>
+					
+		    			<div class="card-content  "  style="position: relative; top:-27px;overflow-y: scroll; height: ">
+		    				<font class='grey-text text-darken-2' size='1'> &nbsp&nbspNOMBRE:&nbsp</font> {{ anomalies|length }} 
+		    				
+		    				 <ul class="collection">
+		    				
+		    				{% for a in anomalies %}
+		    				 	<li class="collection-item avatar">
+		    				 		<i class="{{ 'material-icons small circle red darken-4 ' if a[4] >= 3 else 'material-icons small circle grey accent-2' }}">assignment_late</i>
+		    				 		<span class="title right"><font class='grey-text text-darken-2' size='2'> FEUILLE:&nbsp</font> {{ a[0] }}, <font class='grey-text text-darken-2' size='2'> LIGNE:&nbsp</font> {{ a[1] }}</span>
+		    				 		<p>
+		    						<font class='grey-text text-darken-2' size='2'> DURÉE:&nbsp</font> {{ a[2] }}<br>
+		    						<font class='grey-text text-darken-2 left' size='2'> PRIX:&nbsp</font> {{ a[3] }}  €
+
+		    				 		</p>
+		    				 	</li>
+		    				 {% endfor%}
+		    				 </ul>
+		    				
+						<br>
+		    			</div>
+	    			</div>  
+				<div class="card large hide-on-med-and-down" style="height:425px">
+					<div class="row" style="padding-right:10px;">
+						<div class="card-title">
+
+							<h5 class=" right grey-text text-darken-2 thin">
+								Incertitude relative<i class="material-icons small teal-text" style="position:relative; top:6px; padding-left:10px;" >show_chart</i> 
+							</h5>
+
+						</div>
+					</div>
+					<div class="divider" style="position: relative; top:-26px;"></div>
+
+					<div class="card-content  "  style="position:relative; top:-40px">
+						<canvas id="chart" height="350" width="650" style=" margin-left: auto; margin-right:auto"></canvas>
+
+					</div>
+				</div>  
+
+
+
+
+	    		</div>  
+	    		<!-- /RIGHT-COL -->
+	    	</div>
+	    	<!-- /FIRST-ROW -->
+
+	    	<!-- SECOND-ROW -->
+	    	<div class="row">
+
+	    	</div>
+	    	<!-- /SECOND-ROW -->
+	</div>
+	<!-- /CONTENT -->
+
+	<script>
+
+
+	Chart.defaults.global.responsive = false;
+
+	var ctx = document.getElementById("chart").getContext("2d");
+
+	var myChart = new Chart(ctx, {
+	    	type: 'line',
+	    	data: chartData,
+	    	options: {
+	    		scales: {
+	    			yAxes: [{
+	    				gridLines: {
+	    					offsetGridLines: true
+	    				},
+	    				ticks: {
+	    					padding: 2,
+
+	                                                                        callback: function(value, index, values) {
+							return value + '%';
+						}
+					}
+					}],
+				xAxes: [{
+					ticks: {
+	                        				callback: function(value, index, values) {
+	                        					return 'CAR: '+value + '   ';
+	                        				}
+	                    			}
+	                		}]
+	            			},
+	            		title: {
+	            		display: true,
+	            		text: 'Différence entre coût réel et simulé/estimé'
+	            		}
+		}
+	});
+
+	</script>
+
+</body>
+
+{% endblock %}
+

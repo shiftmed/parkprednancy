@@ -1,0 +1,170 @@
+{% extends "layout.html" %}
+{% set active_page = 'simulation' %}
+
+{% block body %}
+<body>
+	<div class="container">
+
+		<div class="col s12 m12 l12" >
+
+
+			<!-- FORMS-->
+			<div class="row">
+				<div style="margin-top:20px;">
+
+					<h5 class="right thin blue-text text-darken-1"">
+
+						<i class="material-icons right blue-text text-darken-1"" style="font-size: 25px; position: relative;">today</i> 
+
+						1. MOIS
+
+					</h5>
+
+
+				</div>
+			</div>
+
+			<form id="mainForm" action="{{ url_for('results') }}" method="post" enctype="multipart/form-data"> 
+				<!-- CARD TABLENAME -->
+				<div class="card-panel" style="height: 120px;">
+
+
+
+					<div class="input-field col s12">
+						<select id='tableId'  name="selectTable" class="blue-text text-darken-3">
+							<!-- <option value="" disabled  selected>Mois</option> -->
+
+							{% for o in dataTransactions %}
+
+							{% for p in o if not (p == "sqlite_sequence" )%}
+
+							<option value=" {{ p}} "> {{ p|capitalize }}</option>
+
+							{% endfor %}
+							{% endfor %}
+
+							<button type="submit" class="btn btn-default">Go</button>
+						</select>
+						<label>Quel mois souhaitez-vous considérer?</label>
+					</div>
+
+
+				</div>
+
+				<div class="row">
+
+					<div>
+
+						<h5 class="right thin blue-text text-darken-1">
+
+							<i class="material-icons right blue-text text-darken-1" style="font-size: 25px; position: relative;">grid_on</i> 
+
+							2. GRILLE TARIFAIRE
+
+						</h5>
+
+
+					</div>
+				</div>
+
+				<!-- CARD PARKING JSON -->
+				<div class="card-panel" style="height: 120px;">
+
+					<div class="input-field col s12">
+						<select id='tableId'  name="selectPricing" class="blue-text text-darken-3">
+							<!-- <option value="" disabled  selected>Mois</option> -->
+
+							{% for o in dataPricing  | sort(true)%}
+							{% if dataPricing|length < 2%}
+							<option value="empty" disabled>Veuillez créer une grille tarifaire dans la page API</option>
+							{% endif %}
+							{% for p in o if not (p == "sqlite_sequence" )%}
+
+							{% if p == 'simulation' %}
+
+
+
+							<option value=" {{ p}}" selected="selected"> {{ p|capitalize }}</option>
+							{%else%}
+							<option value=" {{ p}} "> {{ p|capitalize }}</option>
+							{%endif%}
+
+
+							{% endfor %}
+							{% endfor %}
+
+							<button type="submit" class="btn btn-default">Go</button>
+						</select>
+						<label>Quelle grille tarifaire souhaitez-vous considérer?</label>
+					</div>
+				</div>
+
+
+
+				<div class="center-align" style="margin-top:4px;" >
+
+
+					<button  id="go" class="btn btn-floating blue accent-2 hidden" style="top:40px" type="submit"" hidden>
+						<i class="material-icons" >build</i>  
+					</button>
+				</div>
+
+			</form>
+		</div>
+	</div>
+
+
+
+	{% with messages = get_flashed_messages(category_filter=["error"]) %}
+	{% set pos_y = 30 %}
+
+	{% if messages %}
+
+	{% for message in messages %}
+
+
+
+	<div class="collection oast" style="position:absolute; bottom:{{pos_y + loop.index*50}}px; right:40px; width:500px;">
+		<a href="#!" class="collection-item blue-text text-accent-2" style="padding-top:10px;">
+			{{message}}
+		</a> 
+		<center><i class=" material-icons grey-text right small" style="position:relative;">check_box</i></center>
+	</div>
+
+
+	
+	{% endfor %}
+
+	{% endif %}         
+
+
+	{% endwith %}
+
+	{% with messages = get_flashed_messages(category_filter=["loader"]) %}
+	{% set pos_y = 185 %}
+
+	{% if messages %}
+
+	{% for message in messages %}
+
+
+
+	<div class="collection oast" style="position:absolute; bottom:{{pos_y - loop.index*50}}px; right:430px;  width:500px; z-index: 1001;" >
+		<a href="#!" class="collection-item blue-text text-accent-1" style="padding-top:10px;">
+			{{message}}
+		</a> 
+	</div>
+
+
+
+	{% endfor %}
+
+	{% endif %}     
+
+
+	{% endwith %}
+
+</body>
+
+
+{% endblock %}

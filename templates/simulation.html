@@ -1,0 +1,161 @@
+{% extends "layout.html" %}
+{% set active_page = 'simulation' %}
+
+{% block body %}
+<body>
+	<div class="container">
+
+		<div class="col s12 m12 l12" >
+
+
+			<!-- FORMS-->
+			<div class="row">
+				<div style="margin-top:20px;">
+
+					<h5 class="right thin blue-text text-darken-1"">
+
+						<i class="material-icons right blue-text text-darken-1"" style="font-size: 25px; position: relative;">today</i> 
+
+						1. MOIS
+
+					</h5>
+
+
+				</div>
+			</div>
+
+			<form id="mainForm" action="{{ url_for('results') }}" method="post" enctype="multipart/form-data"> 
+			<!-- CARD TABLENAME -->
+				<div class="card-panel" style="height: 120px;">
+				
+
+
+					<div class="input-field col s12">
+						<select id='tableId'  name="selectTable" class="blue-text text-darken-3">
+							<!-- <option value="" disabled  selected>Mois</option> -->
+
+							{% for o in data  | sort(true)%}
+
+							{% for p in o if not (p == "sqlite_sequence" )%}
+
+							<option value=" {{ p}} "> {{ p|capitalize }}</option>
+
+							{% endfor %}
+							{% endfor %}
+
+							<button type="submit" class="btn btn-default">Go</button>
+						</select>
+						<label>Quel mois souhaitez-vous considérer?</label>
+					</div>
+
+
+				</div>
+
+				<div class="row">
+
+					<div>
+
+						<h5 class="right thin blue-text text-darken-1">
+
+							<i class="material-icons right blue-text text-darken-1" style="font-size: 25px; position: relative;">grid_on</i> 
+
+							2. GRILLE TARIFAIRE
+
+						</h5>
+
+
+					</div>
+				</div>
+
+				<!-- CARD PARKING JSON -->
+				<div class="card-panel" style="height: 120px;">
+
+					<div class="file-field input-field">      
+
+						<div class="waves-effect btn white darken-2">
+							<span>
+								<i class="material-icons black-text">attach_file</i>
+							</span>
+							<input id="file_id" type="file" name="file">
+
+						</div>
+
+						<div class="file-path-wrapper">
+							<input id='gridId'  class="file-path validate blue-text" type="text" name="filePath">
+						</div>
+
+					</div>
+
+
+				</div>
+
+		
+
+				  	<div class="center-align" style="margin-top:4px;" >
+
+
+				  		<button  id="go" class="btn btn-floating blue accent-2 hidden" style="top:40px" type="submit"" hidden>
+				  			<i class="material-icons" >done</i>  
+				  		</button>
+				  	</div>
+
+	  			</form>
+		</div>
+	</div>
+  	
+
+
+	{% with messages = get_flashed_messages(category_filter=["error"]) %}
+	{% set pos_y = 30 %}
+
+	{% if messages %}
+	
+	{% for message in messages %}
+
+		
+
+	<div class="collection oast" style="position:absolute; bottom:{{pos_y + loop.index*50}}px; right:40px; width:500px;">
+		<a href="#!" class="collection-item blue-text text-accent-1" style="padding-top:10px;">
+		{{message}}
+			<i class=" material-icons blue-text right" style="position:relative;">done</i>
+		</a> 
+	</div>
+		
+
+			
+	{% endfor %}
+
+	{% endif %}			
+
+
+	{% endwith %}
+  
+  {% with messages = get_flashed_messages(category_filter=["loader"]) %}
+  {% set pos_y = 185 %}
+
+  {% if messages %}
+  
+  {% for message in messages %}
+
+
+
+  <div class="collection oast" style="position:absolute; bottom:{{pos_y - loop.index*50}}px; right:430px;  width:500px; z-index: 1001;" >
+    <a href="#!" class="collection-item blue-text text-accent-1" style="padding-top:10px;">
+      {{message}}
+
+    </a> 
+  </div>
+
+
+
+  {% endfor %}
+
+  {% endif %}     
+
+
+  {% endwith %}
+
+</body>
+
+
+{% endblock %}

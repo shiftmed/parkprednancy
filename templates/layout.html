@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<script src='./static/js/Chart.js'></script> 
+
+	<script src="./static/js/pace.js"></script>
+
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<!-- Import materialize.css-->
+	<link type="text/css" rel="stylesheet" href="./static/css/materialize.min.css"  media="screen,projection"/>
+
+	<!-- Custom CSS -->
+	<link rel="stylesheet" type="text/css" href="./static/css/app.css">
+	<link rel="stylesheet" type="text/css" href="./static/css/pace.css">
+
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+	<title>{{ title }}</title>
+
+	<!-- MENU -->
+	<nav class="white" role="navigation">
+		<div class="nav-wrapper container">
+			<a href="/" class="brand-logo grey-text text-darken-2">
+				<i class="material-icons" style="font-size: 45px;">settings_applications</i>
+			</a>
+
+			<a href="#" data-activates="nav-mobile" class="button-collapse black-text"><i class="material-icons">menu</i></a>
+
+			<ul class="right hide-on-med-and-down">
+
+				<li class="{{ 'active' if active_page == 'simulation' else '' }}">
+				<a class="{{ 'blue-text text-darken-2' if active_page == 'simulation' else 'grey-text' }}" href="/simulation""><i class="material-icons small">open_in_browser</i></a>
+				</li>
+
+				<li class="{{ 'active' if active_page == 'dashboard' else '' }}">
+        <a class="{{ 'blue-text text-darken-2' if active_page == 'dashboard' else 'grey-text' }} " href="/dashboard"><i class="material-icons small">dashboard</i></a>
+				</li>
+
+			</ul>
+
+			<ul class="side-nav" id="nav-mobile">
+
+        <li class="{{ 'active' if active_page == 'simulation' else '' }}">
+        <a class="{{ 'blue-text text-darken-2' if active_page == 'simulation' else 'grey-text' }}" href="/simulation""><i class="material-icons small">open_in_browser</i></a>
+        </li>
+
+        <li class="{{ 'active' if active_page == 'dashboard' else '' }}">
+        <a class="{{ 'blue-text text-darken-2' if active_page == 'dashboard' else 'grey-text' }} " href="/dashboard"><i class="material-icons small">dashboard</i></a>
+        </li>
+
+			</ul>
+		</div>
+	</nav>
+	<!-- /MENU -->
+</head>
+
+
+<!-- BODY BLOCK -->     
+{% block body %}
+
+
+{% endblock %}
+
+
+
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="./static/js/jquery-3.1.1.min.js"></script>
+
+<script type="text/javascript" src="./static/js/materialize.min.js"></script>
+
+<script>
+
+ 	$(".button-collapse").sideNav();
+ 
+ 	// $(document).ready(function() {
+
+ 	// 	$('#mainForm').on('submit', function(event) {
+
+ 	// 		event.preventDefault();
+
+ 	// 		var formData = new FormData(document.getElementById('mainForm'));
+
+ 	// 		$.ajax({
+ 	// 			type : 'POST',
+ 	// 			url : '/results',
+		// 		data: formData,
+		// 		contentType : false,
+		// 		processData : false,
+		// 		success: function(result) {
+		// 			console.log(result);
+		// 		}
+ 	// 		});
+
+ 	// 		return true;
+ 	// 	});
+ 	// });
+
+	$(document).ready(function() {
+		$('select').material_select();
+	});
+
+
+	$(document).ready(function(){
+		$('.collapsible').collapsible();
+	});
+
+	$(document).on('click', '.oast ', function() {
+		$(this).fadeOut(function(){
+			$(this).remove();
+		});
+	});
+	
+	$(document).ready(function(){
+	     $(document).keypress(function(e) {
+	          if(e.which == 13) {
+	               $( '#mainForm' ).submit();
+	               return false;
+	          }
+	     });
+	});
+	document.getElementById("carQueryArea")
+	    .addEventListener("keyup", function(event) {
+	    event.preventDefault();
+	    if (event.keyCode == 13) {
+	        document.getElementById("goButton").click();
+	    }
+	});
+
+	$(document).ready(function(){
+          
+	    	// the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+		$('.modal').modal();
+	});
+
+</script>
+  <script>
+  	function getCarPricing(car_id) {
+
+	price = pricingData['data'][car_id]
+	estimatedPrice = price.split(',')[1]
+	hours = price.split(',')[4]
+	minutes = price.split(',')[5].split(']')[0]
+	realPrice = price.split(',')[3]
+	simulatedPrice = price.split(',')[2]
+
+	return {
+		est: estimatedPrice, 
+		sim: simulatedPrice,
+		real : realPrice,
+		hrs : hours,
+		mins : minutes,
+		};
+	}
+
+  	function launchCarPricing() {
+
+	var s =  document.getElementById('carNumber')
+    	car_id = s.value -1;
+    	document.getElementById('resultCarPricing').innerHTML = 
+        '<span class="right"><font size="1">PRIX ESTIMÉ: </font> ' + Math.round(100*getCarPricing(car_id).est)/100  +'€  ' 
+        + '<font size="1">PRIX RÉEL:</font> ' + Math.round(100*getCarPricing(car_id).real)/100 + '€  ' 
+        + '<font size="1">PRIX SIMULÉ: </font>' +Math.round(100*getCarPricing(car_id).sim)/100 +'€  </span><br/>' 
+        + '<span class="right"><font size="1">DURÉE: </font> ' +getCarPricing(car_id).hrs  +' h'+ getCarPricing(car_id).mins +'m </span>  ' ;
+  	} 
+  	</script>
+</html>
