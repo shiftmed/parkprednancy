@@ -59,7 +59,7 @@ from data import *
 # getOptimalPricingPolicy("octobre", 2, 'gare_thiers')
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# 		CONFIGURATION  	  				#
+# 		CONFIGURATION  	  												#
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 app = Flask(__name__)
@@ -69,7 +69,7 @@ app.secret_key = "super secret key"
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# 		BASIC ROUTING	  	  			#
+# 		BASIC ROUTING	  	  											#
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 @app.route('/')
 def index():
@@ -264,7 +264,7 @@ def create_json():
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# 		API ROUTING	  	  				#
+# 		API ROUTING	  	  												#
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
@@ -296,7 +296,7 @@ def resource(tableName, transaction_id):
     		return jsonify(result)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# 		HELPER FUNCTIONS  	  				#
+# 		HELPER FUNCTIONS  	  											#
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 def silentremove(filename):
     try:
@@ -384,7 +384,7 @@ def replace_json_value(form):
 	print '...file created and placed inside the data folder.'
 
 def startLoading():
-	# print '						trying to load the loader lel'
+	# print 'trying to load the loader '
 	loadingMarkUp = Markup(
 					'<div id="wait_overlay" class="progress" >'
 					'<div class="indeterminate"></div>'

@@ -8,7 +8,8 @@ import sys
 from flask import jsonify
 import json
 from pathlib import Path
-# the functions which names are preceeded by 'p' are the xls equivalents for the json handling,
+
+# the functions which names are preceeded by 'p' are the xls equivalents for json handling,
 # the names should be enough to understand what each function does.
 
 def drop_table(tableName):
